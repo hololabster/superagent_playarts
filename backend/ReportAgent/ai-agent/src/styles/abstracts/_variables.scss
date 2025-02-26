@@ -1,0 +1,68 @@
+/* Figma Playarts 디자인 Color 토대로 작성 */
+// Primary color
+$violet-bg: #a8a5e3;
+// $violet-bg: #d6d2f0;
+$violet-900: #290040;
+$violet-800: #4200bf;
+$violet-700: #6912bf;
+$violet-600: #7f1ce1;
+$violet-500: #9849e7;
+$violet-400: #a290ec;
+$violet-300: #cca4f3;
+$violet-200: #e5d2f9;
+$violet-100: #ece9fb;
+$violet-000: #c0bdd4;
+$violet-ivory: #e4e4e3;
+
+// Sub color
+$yellow-400: #ffd27f;
+$red-600: #e74133;
+$red-100: #fdeceb;
+$pink-400: #ff6992;
+$pink-100: #ffe2ea;
+$blue-400: #1da1f2;
+$blue-100: #b9e4ff;
+
+// Gray color
+$gray-600: #292c2e;
+$gray-500: #54585a;
+$gray-400: #949494;
+$gray-300: #c3c3c3;
+$gray-200: #dbdbdb;
+$gray-100: #f5f6f8;
+$black: #000000;
+$white: #ffffff;
+
+// gradient
+$gradient: linear-gradient(90deg, $violet-600 0%, $red-600 100%);
+$rainbow: linear-gradient(
+  100.01deg,
+  #ca73f6 0%,
+  #74ebf4 25%,
+  #f6f1bf 50%,
+  #fdaeb6 75%,
+  #ca73f6 100%
+);
+
+/* Break point */
+$desktop-hd-point: 1920px; // 초고해상도(4k, 8k) 디스플레이
+$tablet-point: 1440px;
+$tablet-mid-point: 1096px;
+$mobile-point: 768px;
+$small-mobile-grid-point: 540px;
+$over-1920-half: calc(
+  ($desktop-hd-point - 100dvw) * -0.5
+); // 초고해상도 디스플레이 중앙 정렬
+
+/* Header height */
+$pc-header-height: 106px; // header + padding-top
+$non-pc-header-height: 75px;
+
+/* Content height */
+$main_height: (
+  default: calc(100dvh - $pc-header-height),
+  non-pc: calc(100dvh - $non-pc-header-height),
+);
+@function get-height($breakpoint: default) {
+  @return map-get($main_height, $breakpoint);
+}

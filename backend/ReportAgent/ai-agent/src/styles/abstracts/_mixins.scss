@@ -1,0 +1,111 @@
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin border-solid($border-width, $color, $radius: 0) {
+  border: $border-width solid $color;
+  border-radius: $radius;
+}
+
+@mixin bg-set($url, $position, $repeat, $size) {
+  background-image: url($url);
+  background-position: $position;
+  background-repeat: $repeat;
+  background-size: $size;
+}
+
+@mixin scrollable {
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: $gray-400;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: $gray-300;
+  }
+}
+
+// FONT
+@mixin CantedFX {
+  font-family: "CantedFX", sans-serif;
+  font-weight: 700;
+}
+
+@mixin font-style($family, $size, $weight, $line-height, $letter-spacing) {
+  font-family: $family;
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $line-height;
+  letter-spacing: $letter-spacing;
+}
+
+/* Figma Playarts 디자인 Typography 토대로 작성 */
+// head
+@mixin head_1 {
+  @include font-style(CantedFX, 40px, 700, 130%, 0);
+}
+@mixin head_2 {
+  @include font-style(CantedFX, 34px, 700, 130%, 0);
+}
+@mixin head_3 {
+  @include font-style(CantedFX, 30px, 700, 130%, 0);
+}
+
+// title
+@mixin title_1 {
+  @include font-style(CantedFX, 26px, 700, 130%, 0);
+}
+@mixin title_2 {
+  @include font-style(CantedFX, 24px, 700, 130%, 0);
+}
+
+// subtitle_CantedFX
+@mixin subtitle_1 {
+  @include font-style(CantedFX, 20px, 700, 130%, 0);
+}
+@mixin subtitle_2 {
+  @include font-style(CantedFX, 18px, 700, 130%, 0);
+}
+@mixin subtitle_3 {
+  @include font-style(CantedFX, 16px, 700, 130%, 0);
+}
+
+// subtitle_Pretendard
+@mixin subtitle_4 {
+  @include font-style(Pretendard, 14px, 700, 130%, 0);
+}
+@mixin subtitle_5 {
+  @include font-style(Pretendard, 13px, 700, 130%, 0);
+}
+@mixin subtitle_6 {
+  @include font-style(Pretendard, 12px, 700, 130%, 0);
+}
+
+// body
+@mixin body_0 {
+  @include font-style(Pretendard, 18px, 700, 150%, -0.015em);
+}
+@mixin body_1 {
+  @include font-style(Pretendard, 16px, 400, 150%, -0.015em);
+}
+@mixin body_2 {
+  @include font-style(Pretendard, 14px, 400, 150%, 0);
+}
+@mixin body_3 {
+  @include font-style(Pretendard, 13px, 700, 150%, 0);
+}
+
+// detail
+@mixin detail_1 {
+  @include font-style(Pretendard, 12px, 400, 150%, 0);
+}
+@mixin detail_2 {
+  @include font-style(Pretendard, 11px, 400, 150%, 0);
+}
+@mixin detail_3 {
+  @include font-style(Pretendard, 10px, 400, 150%, 0);
+}

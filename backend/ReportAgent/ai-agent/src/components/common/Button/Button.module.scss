@@ -1,0 +1,100 @@
+@import "@/styles/abstracts/variables";
+@import "@/styles/abstracts/mixins";
+
+@mixin rounded-button-base {
+  height: 42px;
+  border-radius: 42px;
+  border: 2px solid $black;
+  border-bottom: 5px solid $black;
+}
+
+@mixin violet-theme {
+  background-color: $violet-400;
+
+  &:active {
+    color: $white;
+    background-color: $violet-800;
+  }
+}
+
+@mixin white-theme {
+  background-color: $white;
+
+  &:active {
+    color: $white;
+    background-color: #01a0a0;
+  }
+}
+
+.button {
+  height: 50px;
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  box-sizing: border-box;
+  @include subtitle_3;
+  cursor: pointer;
+  color: $black;
+
+  &.btn-A {
+    border: 2px solid $black;
+    @include violet-theme;
+  }
+
+  &.btn-B {
+    border: 2px solid $black;
+    @include white-theme;
+  }
+
+  &.btn-C {
+    @include rounded-button-base;
+    @include violet-theme;
+  }
+
+  &.btn-D {
+    @include rounded-button-base;
+    @include white-theme;
+  }
+
+  &.btn-E {
+    @include rounded-button-base;
+    background-color: transparent;
+
+    &:active {
+      background-color: $white;
+    }
+
+    &.selected {
+      background-color: $white;
+    }
+  }
+
+  &.rainbow {
+    background: $rainbow;
+  }
+
+  &:disabled {
+    pointer-events: none;
+    background-color: $gray-200;
+    color: $white;
+    border: none;
+  }
+
+  .animateSpin {
+    margin-left: 5px;
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

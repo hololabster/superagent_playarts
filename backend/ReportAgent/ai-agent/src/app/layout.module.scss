@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main {
+  transition: width 0.3s ease-in-out, margin-left 0.3s ease-in-out;
+
+  &.with_aside {
+    width: calc(100% - 320px);
+    margin-left: 320px;
+  }
+
+  &.without_aside {
+    width: 100%;
+    margin-left: 0;
+  }
+}
