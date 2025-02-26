@@ -1,93 +1,226 @@
-# superagent_playarts
+# Agent-Based Web3 Service Integration Project
 
+This project offers an all-in-one solution that unifies:
 
+- **One-Shot (LoRA) Training**: Build a personalized agent with only one (or a few) images.
+- **Web3 Wallet/NFT Analysis**: Analyze wallets and NFT data.
+- **Twitter Auto-Posting**: Generate context-aware images and automatically post them on Twitter.
+- **Revenue Sharing & Agent Monetization**: Turn your trained agents into valuable assets.
 
-## Getting started
+## Key Features
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+### One-Shot LoRA Training
+- Train a LoRA model with just a single or few images.
+- `TrainerService` handles background removal (SAM), compositing, auto-caption, and training.
+- Once training completes, the agent is registered in the DB with a unique `agent_key`.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+### Web3 Wallet / NFT Analysis
+- `NFTService` and `WalletService` to parse wallet addresses, NFT data, and transactions.
+- Summarize findings via LLM-based reporting.
 
-## Add your files
+### Agent API (Monetization & Revenue Split)
+- After training, the agent is ready for image generation via `/agent/<agent_key>/inference`.
+- The agent owner can share or sell usage rights, enabling potential revenue streams.
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+### Twitter Integration
+- Create an AI-driven tweet: LLM to interpret user messages or NFT/wallet context → agent-generated image → auto-upload to Twitter.
 
+### Revenue Sharing Model
+- Deploy agent as an NFT, or integrate a smart contract to handle royalty splits.
+- Earn from API usage fees or secondary sales.
+
+## Project Structure
+
+```bash
+.
+├── README.md
+├── requirements.txt
+├── .env               # Environment variables (DB, LLM Keys, etc.)
+├── src/
+│   ├── app.py         # Main entry (Django/Flask/FastAPI)
+│   ├── urls.py
+│   ├── views.py       # Route handlers (chat_view, twit_view, etc.)
+│   ├── models/
+│   │   └── models.py  # Django Models: AgentModel, TrainingJob
+│   ├── services/
+│   │   ├── base_service.py
+│   │   ├── llm_service.py
+│   │   ├── nft_service.py
+│   │   ├── wallet_service.py
+│   │   ├── trainer_service.py  # Core for one-shot LoRA
+│   │   ├── model_manager.py
+│   │   └── ...
+│   ├── core/
+│   │   ├── command_orchestrator.py
+│   │   ├── command_parser.py
+│   │   └── ...
+│   └── ...
+├── tests/
+│   ├── test_services.py
+│   └── test_models.py
+└── manage.py          # Django main script
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/AURA2285416/superagent_playarts.git
-git branch -M main
-git push -uf origin main
+
+## Installation & Usage
+
+### Clone & Enter Directory
+
+```bash
+git clone https://github.com/yourrepo/agent-web3-project.git
+cd agent-web3-project
 ```
 
-## Integrate with your tools
+### Create & Activate Virtual Environment
 
-- [ ] [Set up project integrations](https://gitlab.com/AURA2285416/superagent_playarts/-/settings/integrations)
+```bash
+python -m venv venv
+source venv/bin/activate  # (Windows: venv\Scripts\activate)
+```
 
-## Collaborate with your team
+### Install Dependencies
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+```bash
+pip install -r requirements.txt
+```
 
-## Test and Deploy
+### Database Setup (Django Example)
 
-Use the built-in continuous integration in GitLab.
+```bash
+python manage.py migrate
+python manage.py createsuperuser
+```
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+### Set Environment Variables (.env)
 
-***
+- DB credentials, RPC_URL, LLM Token, Twitter Keys, etc.
 
-# Editing this README
+### Run Server
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+```bash
+python manage.py runserver 0.0.0.0:8000
+```
+Then open [http://localhost:8000](http://localhost:8000)
 
-## Suggestions for a good README
+## Example Workflows
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+### Train Agent via One-Shot
 
-## Name
-Choose a self-explaining name for your project.
+1. **Upload training image:**
+   ```http
+   POST /api/upload_training_image/
+   {
+       "character_name": "example_name",
+       "image": (file upload)
+   }
+   ```
+   - Returns `task_id`
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+2. **Check training status:**
+   ```http
+   GET /api/check_training_status/?task_id=xxx
+   ```
+   - Poll until `status=completed`
+   - A new `AgentModel` record with a unique `agent_key` is created
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+### Wallet Analysis
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+```http
+POST /api/send_message/
+{
+    "message": "0x1234..."
+}
+```
+- The system recognizes the wallet address → calls `wallet_service.analyze_wallet()` → LLM to generate a summary.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+### Auto Tweet
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+```http
+POST /twit
+{
+    "agentKey": "uuid",
+    "targetMessage": "some scenario"
+}
+```
+- LLM interprets, the agent generates an image, and the image is posted via Tweepy.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+### Agent Monetization
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+```http
+GET /agent/<agent_key>/inference
+```
+- Generate images using that LoRA-based agent.
+- The agent owner can share API keys, charge fees, or implement profit-sharing.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+## TrainerService Sample Code (Comments in English)
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+```python
+# trainer_service.py (Excerpt)
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+import logging
+import threading
+import subprocess
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+class TrainerService:
+    def __init__(self):
+        self.job_queue = []
+        self.running_jobs = {}
+        self.max_concurrent_jobs = 3
+        self.logs = {}
+        self.available_gpus = [4]  # Example GPU
 
-## License
-For open source projects, say how it is licensed.
+        t = threading.Thread(target=self._worker_loop, daemon=True)
+        t.start()
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+        logging.info("TrainerService initialized.")
+
+    def start_lora_training(self, character_name: str, source_image_path: str) -> str:
+        """
+        Kick off a LoRA training job with minimal images.
+        """
+        logging.info(f"Starting LoRA training for {character_name}")
+        # 1) Insert AgentModel into DB
+        # 2) Remove background, composite
+        # 3) Create training config
+        # 4) Enqueue job
+        return "task_id"
+
+    def _worker_loop(self):
+        """
+        Background thread that picks up training jobs from self.job_queue and processes them.
+        """
+        while True:
+            pass
+
+    def _run_training_job(self, task_id: str, job_info: dict):
+        """
+        Run the training script as a subprocess, parse logs, update DB, etc.
+        """
+        logging.info(f"[{task_id}] Running training job: config={job_info['config_path']}")
+```
+
+## Testing
+
+Run unit tests via:
+
+```bash
+pytest
+```
+
+or
+
+```bash
+python manage.py test
+```
+
+### Integration test:
+1. Upload an image to train an agent.
+2. Verify `agent_key` is issued in DB.
+3. Generate images via `/agent/<agent_key>/inference`.
+4. Confirm Twitter auto-posting if configured.
+
+## Additional Notes
+- **Revenue Sharing**: Not fully implemented in this code but can be integrated with a separate contract or DB logic.
+- **Scalability**: Docker containers, multi-GPU setups, or cloud orchestration.
+- **Security**: Restrict agent usage with JWT or IP-based authentication.
+- **Secondary Creations**: Turn a trained agent into an NFT with references to LoRA weights, enabling resale or licensing.
+
