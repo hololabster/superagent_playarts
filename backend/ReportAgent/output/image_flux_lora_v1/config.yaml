@@ -1,0 +1,59 @@
+job: extension
+config:
+  name: image_flux_lora_v1
+  process:
+  - type: sd_trainer
+    training_folder: output
+    device: cuda:3
+    network:
+      type: lora
+      linear: 16
+      linear_alpha: 16
+    save:
+      dtype: float16
+      save_every: 100
+      max_step_saves_to_keep: 4
+      push_to_hub: false
+    datasets:
+    - folder_path: /mnt/striped_nvme/ai-toolkit/superagent_playarts/ReportAgent/media/image_dataset
+      caption_ext: txt
+      caption_dropout_rate: 0.1
+      shuffle_tokens: true
+      cache_latents_to_disk: true
+      resolution:
+      - 512
+      - 768
+      - 1024
+    train:
+      batch_size: 1
+      steps: 1500
+      gradient_accumulation_steps: 1
+      train_unet: true
+      gradient_checkpointing: true
+      noise_scheduler: flowmatch
+      optimizer: adamw8bit
+      lr: 0.0001
+      ema_config:
+        use_ema: true
+        ema_decay: 0.99
+      dtype: bf16
+    model:
+      name_or_path: black-forest-labs/FLUX.1-schnell
+      assistant_lora_path: ostris/FLUX.1-schnell-training-adapter
+      is_flux: true
+      quantize: true
+    sample:
+      sampler: flowmatch
+      sample_every: 100
+      width: 1024
+      height: 768
+      prompts:
+      - image_flux_lora_v1 is happy in cyberpunk style city
+      - image_flux_lora_v1 is holding a magical staff in a fantasy forest
+      - image_flux_lora_v1 riding a futuristic hoverboard through a neon cityscape
+        at night
+      - image_flux_lora_v1 sitting by a campfire
+      seed: 42
+      walk_seed: true
+      guidance_scale: 0.75
+      sample_steps: 10
