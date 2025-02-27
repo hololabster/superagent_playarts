@@ -229,7 +229,7 @@ class TrainerService:
             unloading_lora_detected = False  # "Unloading assistant lora" 메시지 감지
             optimizer_saved = False  # optimizer.pt 저장 감지
             training_completed = False
-            total_steps = 100  # 기본 스텝 수
+            total_steps = 1000  # 기본 스텝 수
             current_step = 0
             
             for line in process.stdout:
@@ -693,7 +693,7 @@ config:
           resolution: [512, 768, 1024]
       train:
         batch_size: 1
-        steps: 100
+        steps: 1000
         gradient_accumulation_steps: 1
         train_unet: true
         gradient_checkpointing: true
