@@ -40,12 +40,12 @@ const OutfitEditor: React.FC<OutfitEditorProps> = ({
   const [isPainting, setIsPainting] = useState<boolean>(false);
   
   // Advanced settings
-  const [steps, setSteps] = useState<number>(20);
-  const [guidance, setGuidance] = useState<number>(7.5);
-  const [seed, setSeed] = useState<number>(42);
-  const [useAnimeSeg, setUseAnimeSeg] = useState<boolean>(false);
-  const [smoothMask, setSmoothMask] = useState<boolean>(true);
-  const [morphOperation, setMorphOperation] = useState<string>("none");
+  const [steps, setSteps] = useState<number>(25);
+  const [guidance, setGuidance] = useState<number>(10);
+  const [seed, setSeed] = useState<number>(4343);
+  const [useAnimeSeg, setUseAnimeSeg] = useState<boolean>(true);
+  const [smoothMask, setSmoothMask] = useState<boolean>(false);
+  const [morphOperation, setMorphOperation] = useState<string>("close");
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
   
   const [error, setError] = useState<string | null>(null);
@@ -56,7 +56,7 @@ const OutfitEditor: React.FC<OutfitEditorProps> = ({
   const imageRef = useRef<HTMLImageElement | null>(null);
   
   // Gradio API endpoint
-  const API_DOMAIN = 'https://fc434e0e0e3414ef2d.gradio.live/';
+  const API_DOMAIN = 'https://d8b82e35a2ac6cc83a.gradio.live/';
   const API_URL = `${API_DOMAIN}api/predict`;
   
   // Check server on component mount
@@ -311,7 +311,7 @@ const OutfitEditor: React.FC<OutfitEditorProps> = ({
             useAnimeSeg,  // boolean
             smoothMask,   // boolean
             morphOperation, // string
-            "runwayml/stable-diffusion-inpainting" // Another inpainting model
+            "Sanster/anything-4.0-inpainting" // Another inpainting model
           ]
         })
       });
@@ -632,17 +632,10 @@ const OutfitEditor: React.FC<OutfitEditorProps> = ({
                     <div className={styles.nftButtons}>
                       <button
                         onClick={handleMintAsNFT}
-                        className={styles.mintButton}
-                      >
-                        <Award size={16} />
-                        Mint as NFT
-                      </button>
-                      <button
-                        onClick={handleMintAsIPA}
                         className={styles.ipaButton}
                       >
                         <DollarSign size={16} />
-                        Register as IPA
+                        Mint as NFT and IPA
                       </button>
                     </div>
                   </div>
