@@ -284,6 +284,9 @@
   @include flex-center;
   .text {
     font-weight: 700;
+    span {
+      color: $violet-800;
+    }
   }
   .progress {
     @include head_1;
@@ -433,7 +436,7 @@
   }
 }
 
-.twit_handle_area{
+.twit_handle_area {
   margin-top: 12px;
   display: flex;
   flex-direction: column;

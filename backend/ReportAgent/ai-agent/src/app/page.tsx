@@ -20,6 +20,7 @@ import { getLicenseTokenListFromIpAsset } from "@/utils/fetchIpaAssets";
 import BuyLicenseToken from "@/components/Chat/BuyLicenseToken";
 import ClaimRoyalty from "@/components/Chat/ClaimRoyalty";
 import TwitToTakoyanAi from "@/components/Chat/TwitToTakoyanAi";
+import OutfitEditor from "@/components/Chat/OutfitEditor";
 
 export default function Home() {
   const { client } = useStoryClient();
@@ -86,6 +87,9 @@ export default function Home() {
           addLoadingMessage={addLoadingMessage}
           replaceLoadingWithComponent={replaceLoadingWithComponent}
         />
+      ),
+      outfit: (
+        <OutfitEditor/>
       )
     };
     return componentMap;
@@ -378,6 +382,10 @@ export default function Home() {
         case "twit":
           addLoadingMessage();
           replaceLoadingWithComponent("twit");
+          break;
+        case "outfit":
+          addLoadingMessage();
+          replaceLoadingWithComponent("outfit");
           break;
         default:
           break;

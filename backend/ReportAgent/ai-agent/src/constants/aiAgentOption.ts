@@ -6,7 +6,8 @@ export interface AiAgentOptionType {
     | "analyzingWallet"
     | "generate"
     | "claim"
-    | "twit";
+    | "twit"
+    | "outfit";
   title: string;
 }
 
@@ -57,5 +58,9 @@ export const aiAgentOptions: AiAgentOptionType[] = [
   {
     type: "twit",
     title: "Twitter to takoyan_ai",
+  },
+  {
+    type: "outfit",
+    title: "Edit character's outfit",
   },
 ];

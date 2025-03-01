@@ -22,9 +22,9 @@ interface TrainingCharacterImagesProps {
   setMessages: React.Dispatch<React.SetStateAction<MessageWithLoading[]>>;
   setIsAITyping: React.Dispatch<React.SetStateAction<boolean>>;
 }
-export default function TrainingCharacterImagesNFT({ 
-  setMessages, 
-  setIsAITyping 
+export default function TrainingCharacterImagesNFT({
+  setMessages,
+  setIsAITyping,
 }: TrainingCharacterImagesProps) {
   const { client } = useStoryClient();
   const { address } = useAccount();
@@ -123,11 +123,6 @@ export default function TrainingCharacterImagesNFT({
         const response = await checkStatus(taskId);
         console.log(response.logs);
 
-        /**
-         * Training 횟수 1500, ("1499/1500" or "799/800")
-         * 1. 1499가 되면 saveState 2로변경
-         * 2. saveState가 2이면 isSuccess가 ture가되고 progress 100으로 유지
-         */
         if (response.logs.includes("Training completed")) {
           setSaveState(2);
           const match = response.logs.match(/https:\/\/.*?inference/);
@@ -157,6 +152,67 @@ export default function TrainingCharacterImagesNFT({
 
     return () => clearInterval(intervalId);
   }, [taskId, characterName, saveState]);
+
+  const handleMintClick = async () => {
+    if (client) {
+      setMessages((prev) => [
+        ...prev,
+        { content: "Mint and Register IPA", isAnswer: false },
+      ]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          content: "",
+          isAnswer: true,
+          isLoading: true,
+        },
+      ]);
+
+      const result = await mintAndRegisterIpa(
+        client,
+        selectedNft as string,
+        true,
+        agentUrl,
+        characterName
+      );
+
+      const { txHash, ipId, licenseTermsIds } = result!;
+      if (!licenseTermsIds) return;
+
+      setMessages((prev) => prev.slice(0, -1));
+
+      // 사용하고 싶지만, hook을 다 설정하고 다시 사용해봐야 될 것 같다.
+      const MintAndRegisterIPAMessage = () => {
+        const explorerUrl = `https://aeneid.explorer.story.foundation/ipa/${ipId}`;
+        return (
+          <ul className={styles.ipa_list}>
+            <li>
+              <strong>Root IPA created at transaction hash:</strong>
+              <span>{txHash}</span>
+            </li>
+            <li>
+              <strong>IPA ID:</strong>
+              <span>{ipId}</span>
+            </li>
+            <li>
+              <strong>License Terms ID:</strong>
+              <span>{licenseTermsIds[0]}</span>
+            </li>
+            <li>
+              <strong>View on the explorer:</strong>
+              <a href={explorerUrl}></a>
+              <span>{ipId}</span>
+            </li>
+          </ul>
+        );
+      };
+      const message = `Root IPA created at transaction hash: ${txHash}
+IPA ID: ${ipId}
+License Terms ID: ${licenseTermsIds[0]}
+View on the explorer: https://aeneid.explorer.story.foundation/ipa/${ipId}`;
+      typeMessage(message, setMessages, setIsAITyping);
+    }
+  };
 
   return (
     <div className={styles.training_form_container}>
@@ -226,7 +282,9 @@ export default function TrainingCharacterImagesNFT({
           {isTraining ? (
             // 3. Training...
             <div className={styles.status_container}>
-              <p className={styles.text}>Training {characterName} character</p>
+              <p className={styles.text}>
+                Training <span>{characterName}</span> character
+              </p>
 
               {isTrainingLoading ? (
                 <div className={styles.spinner_wrap}>
@@ -240,43 +298,46 @@ export default function TrainingCharacterImagesNFT({
                 // 4. successful training
                 <div className={styles.success_container}>
                   <p>Training completed successfully 😘</p>
-                  <Link
-                    href={agentUrl}
-                    className={styles.url_text}
-                  >
+                  <Link href={agentUrl} className={styles.url_text}>
                     move to agent 🤖
                   </Link>
                   <button
-              className={styles.mintButton}
-              onClick={async () => {
-                if (client) {
-                  setMessages((prev) => [
-                    ...prev,
-                    { content: "Mint and Register IPA", isAnswer: false },
-                  ]);
-                  setMessages((prev) => [
-                    ...prev,
-                    {
-                      content: "",
-                      isAnswer: true,
-                      isLoading: true,
-                    },
-                  ]);
-                  const { txHash, ipId, licenseTermsIds } =
-                    await mintAndRegisterIpa(client, selectedNft, true, agentUrl, characterName);
+                    className={styles.mintButton}
+                    onClick={async () => {
+                      if (client) {
+                        setMessages((prev) => [
+                          ...prev,
+                          { content: "Mint and Register IPA", isAnswer: false },
+                        ]);
+                        setMessages((prev) => [
+                          ...prev,
+                          {
+                            content: "",
+                            isAnswer: true,
+                            isLoading: true,
+                          },
+                        ]);
+                        const { txHash, ipId, licenseTermsIds } =
+                          await mintAndRegisterIpa(
+                            client,
+                            selectedNft as string,
+                            true,
+                            agentUrl,
+                            characterName
+                          );
 
-                  setMessages((prev) => prev.slice(0, -1));
-                  const message = `Root IPA created at transaction hash: ${txHash}
+                        setMessages((prev) => prev.slice(0, -1));
+                        const message = `Root IPA created at transaction hash: ${txHash}
                   IPA ID: ${ipId}
                   License Terms ID: ${licenseTermsIds[0]}
                   View on the explorer: https://aeneid.explorer.story.foundation/ipa/${ipId}`;
-                  typeMessage(message, setMessages, setIsAITyping);
-                }
-              }}
-              title="Mint and Register IPA"
-            >
-              Mint and Register IPA
-            </button>
+                        typeMessage(message, setMessages, setIsAITyping);
+                      }
+                    }}
+                    title="Mint and Register IPA"
+                  >
+                    Mint and Register IPA
+                  </button>
                 </div>
               )}
             </div>
@@ -318,7 +379,7 @@ export default function TrainingCharacterImagesNFT({
                 <p className={styles.error_message}>{errorMessage}</p>
 
                 <button type="submit" className={styles.btn}>
-                  Start Training with Selected NFT
+                  Start Training
                 </button>
               </form>
               {trainingStep === 2 && isLoading && (
