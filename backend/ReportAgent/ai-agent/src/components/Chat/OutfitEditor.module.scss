@@ -2,6 +2,78 @@
 @import "@/styles/abstracts/mixins";
 
 .outfitEditor {
+  /* Add these styles to your OutfitEditor.module.scss file */
+
+.nftSuggestion {
+  margin-top: 12px;
+  padding: 12px;
+  background-color: rgba(59, 130, 246, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  text-align: center;
+  
+  p {
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: #2563eb;
+  }
+}
+
+.nftButtons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.mintButton, 
+.ipaButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.mintButton {
+  background-color: #3b82f6;
+  color: white;
+  
+  &:hover {
+    background-color: #2563eb;
+  }
+}
+
+.ipaButton {
+  background-color: #10b981;
+  color: white;
+  
+  &:hover {
+    background-color: #059669;
+  }
+}
+
+/* Additional styles for the result container */
+.resultImageContainer {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+  
+  img {
+    width: 100%;
+    display: block;
+  }
+}
     display: flex;
     flex-direction: column;
     width: 100%;

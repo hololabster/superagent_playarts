@@ -1,6 +1,9 @@
 import React, { useState, useRef, useEffect, useId } from 'react';
 import styles from './OutfitEditor.module.scss';
-import { Upload, Trash2, ThermometerSnowflake, Wand2 } from 'lucide-react';
+import { Upload, Trash2, ThermometerSnowflake, Wand2, Award, DollarSign } from 'lucide-react';
+import { useStoryClient } from '@/app/providers';
+import { mintAndRegisterIpa } from '@/services/ipa.service';
+import { typeMessage } from '@/utils/message';
 
 interface Coordinate {
   x: number;
@@ -8,7 +11,20 @@ interface Coordinate {
   size: number;
 }
 
-const OutfitEditor: React.FC = () => {
+interface OutfitEditorProps {
+  setMessages?: React.Dispatch<React.SetStateAction<MessageWithLoading[]>>;
+  setIsAITyping?: React.Dispatch<React.SetStateAction<boolean>>;
+  addLoadingMessage?: () => void;
+}
+
+const OutfitEditor: React.FC<OutfitEditorProps> = ({ 
+  setMessages, 
+  setIsAITyping,
+  addLoadingMessage
+}) => {
+  // Get Story Client for IPA/NFT operations
+  const { client } = useStoryClient();
+  
   // 고유 ID 생성
   const uniqueId = useId();
   const inputId = `image-upload-${uniqueId}`;
@@ -40,7 +56,7 @@ const OutfitEditor: React.FC = () => {
   const imageRef = useRef<HTMLImageElement | null>(null);
   
   // Gradio API endpoint
-  const API_DOMAIN = 'https://3e1a58ec46098d8838.gradio.live/';
+  const API_DOMAIN = 'https://fc434e0e0e3414ef2d.gradio.live/';
   const API_URL = `${API_DOMAIN}api/predict`;
   
   // Check server on component mount
@@ -363,6 +379,55 @@ const OutfitEditor: React.FC = () => {
   const generateRandomSeed = () => {
     setSeed(Math.floor(Math.random() * 1000000));
   };
+
+  // Handle mint as NFT - super simplified version
+  const handleMintAsNFT = async () => {
+    console.log("Mint as NFT button clicked", {resultImage, client});
+    
+    if (!resultImage || !client) {
+      alert("Missing result image or client");
+      return;
+    }
+    
+    try {
+      // Just directly call the mintAndRegisterIpa function
+      alert("Starting NFT minting process...");
+      const result = await mintAndRegisterIpa(client, resultImage);
+      alert("NFT minted successfully!");
+      console.log("Mint result:", result);
+    } catch (error) {
+      console.error('Error minting NFT:', error);
+      alert(`Error: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  };
+  
+  // Handle mint as IPA - super simplified version
+  const handleMintAsIPA = async () => {
+    console.log("Register as IPA button clicked", {resultImage, client});
+    
+    if (!resultImage || !client) {
+      alert("Missing result image or client");
+      return;
+    }
+    
+    try {
+      // Get character name
+      const characterName = 'Anime Character';
+      
+      // Just directly call the mintAndRegisterIpa function with agent flag
+      alert("Starting IPA registration process...");
+      const result = await mintAndRegisterIpa(
+        client,
+        resultImage,
+        true  // agent flag
+      );
+      alert("IPA registered successfully!");
+      console.log("Register result:", result);
+    } catch (error) {
+      console.error('Error registering IPA:', error);
+      alert(`Error: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  };
   
   return (
     <div className={styles.outfitEditor}>
@@ -560,6 +625,27 @@ const OutfitEditor: React.FC = () => {
                 <h3>Result Image</h3>
                 <div className={styles.resultImageContainer}>
                   <img src={resultImage} alt="Processed result" />
+                  
+                  {/* NFT/IPA suggestion banner */}
+                  <div className={styles.nftSuggestion}>
+                    <p>Love your new outfit design? Make it permanent!</p>
+                    <div className={styles.nftButtons}>
+                      <button
+                        onClick={handleMintAsNFT}
+                        className={styles.mintButton}
+                      >
+                        <Award size={16} />
+                        Mint as NFT
+                      </button>
+                      <button
+                        onClick={handleMintAsIPA}
+                        className={styles.ipaButton}
+                      >
+                        <DollarSign size={16} />
+                        Register as IPA
+                      </button>
+                    </div>
+                  </div>
                 </div>
                 <button
                   onClick={continueEditingWithResult}

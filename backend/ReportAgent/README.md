@@ -163,3 +163,38 @@ GET /agent/<agent_key>/inference
 - **Security**: Restrict agent usage with JWT or IP-based authentication.
 - **Secondary Creations**: Turn a trained agent into an NFT with references to LoRA weights, enabling resale or licensing.
 
+## Chatbot System: Real User Interaction Flow
+
+### 1. Creating Your Personal Agent (Chat Interface)
+- Open chat and send an image of your character, or directly import from your existing NFT.
+- Chatbot confirms receipt and begins training your AI agent with one-shot training.
+- Receive a chat notification once training is complete.
+
+### 2. Wallet and NFT Analysis (Chat Interface)
+- Type your wallet address directly into the chat.
+- The chatbot analyzes your wallet activities and NFTs.
+- It responds with a clear, conversational summary and insights.
+
+### 3. Generating Images & Tweeting via Chat
+- Describe the type of image or outfit you want directly in chat.
+- The chatbot uses Anime Segmentation and Inpainting with a Magic Brush to remix and style your NFT while keeping the original style intact.
+- Confirm if you want the chatbot to automatically post the image to Twitter.
+
+### 4. Monetizing Your Agent (Chat Interaction)
+- Chatbot provides an easy-to-use link to monetize your trained agent.
+- Set pricing or usage rights directly via conversational prompts.
+- Receive automated royalty updates within the chat interface.
+
+### 5. Continuous Engagement
+- Chat with your agent regularly; the chatbot learns and improves from each interaction.
+- Get suggestions and real-time feedback through friendly chat conversations.
+
+### Example Chat Flow:
+1. You: "Import this NFT and train an AI agent from it."
+2. Bot: "Got it! Training your personal AI agent now. I'll notify you shortly."
+3. Bot: "Your agent is ready! What would you like to create?"
+4. You: "Remix my NFT with a futuristic outfit using the Magic Brush."
+5. Bot: "Done! Should I tweet this for you?"
+
+This simplified chat-based approach makes using advanced AI features, NFTs, and monetization straightforward and enjoyable for all users.
+
